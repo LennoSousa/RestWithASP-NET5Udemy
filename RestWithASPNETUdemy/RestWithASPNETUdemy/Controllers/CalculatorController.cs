@@ -19,6 +19,8 @@ namespace RestWithASPNETUdemy.Controllers
             _logger = logger;
         }
 
+        #region Operações da Calculadora
+
         [HttpGet("sum/{firstNumber}/{secondNumber}")]
         public IActionResult Soma(string firstNumber, string secondNumber)
         {
@@ -121,5 +123,7 @@ namespace RestWithASPNETUdemy.Controllers
 
             return isNumber;
         }
+
+        #endregion
     }
 }
