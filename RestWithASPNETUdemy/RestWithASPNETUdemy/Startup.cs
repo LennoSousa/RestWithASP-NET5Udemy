@@ -2,15 +2,18 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using RestWithASPNETUdemy.Model.Context;
 using RestWithASPNETUdemy.Services.Implementations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RestWithASPNETUdemy
 {
@@ -29,7 +32,15 @@ namespace RestWithASPNETUdemy
 
             services.AddControllers();
 
-            //Aducionando injeção de dependência da nossa interface criada.
+            var connection = Configuration["MySQLConnection:MySQLConnectionString"];
+            
+            //Essa versão do curso, não está funcionando.
+            //services.AddDbContext<MySQLContext>(options => options.UseMySql(connection));
+            
+            //precisou adicionar o trecho final do código para poder estabelecer conexão com o banco.
+            services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
+
+            //Adicionando injeção de dependência da nossa interface criada.
             services.AddScoped<IPersonService, PersonServiceImplementation>();
         }
 
