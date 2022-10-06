@@ -40,6 +40,10 @@ namespace RestWithASPNETUdemy
             //precisou adicionar o trecho final do código para poder estabelecer conexão com o banco.
             services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
+            //Versionamento da API
+            services.AddApiVersioning();
+
+
             //Adicionando injeção de dependência da nossa interface criada.
             services.AddScoped<IPersonService, PersonServiceImplementation>();
         }
