@@ -12,6 +12,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using Pomelo.EntityFrameworkCore.MySql.Update.Internal;
+using RestWithASPNETUdemy.Repository.Generic;
 
 namespace RestWithASPNETUdemy
 {
@@ -61,10 +62,13 @@ namespace RestWithASPNETUdemy
 
             //Adicionando injeção de dependência da nossa interface criada.
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
-            services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
+            //services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 
             services.AddScoped<IBookBusiness, BookBusinessImplementation>();
-            services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+            //services.AddScoped<IBookRepository, BookRepositoryImplementation>();
+
+            services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
         }
 
 

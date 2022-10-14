@@ -1,88 +1,88 @@
-﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Model.Context;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿//using RestWithASPNETUdemy.Model;
+//using RestWithASPNETUdemy.Model.Context;
+//using System;
+//using System.Collections.Generic;
+//using System.Linq;
 
-namespace RestWithASPNETUdemy.Repository
-{
-    public class PersonRepositoryImplementation : IPersonRepository
-    {
-        private MySQLContext _context;
+//namespace RestWithASPNETUdemy.Repository
+//{
+//    public class PersonRepositoryImplementation : IPersonRepository
+//    {
+//        private MySQLContext _context;
 
-        public PersonRepositoryImplementation(MySQLContext context)
-        {
-            _context = context;
-        }
+//        public PersonRepositoryImplementation(MySQLContext context)
+//        {
+//            _context = context;
+//        }
 
-        public Person Create(Person person)
-        {
-            try
-            {
-                _context.Add(person);
-                _context.SaveChanges();
-            }
-            catch (Exception)
-            {
+//        public Person Create(Person person)
+//        {
+//            try
+//            {
+//                _context.Add(person);
+//                _context.SaveChanges();
+//            }
+//            catch (Exception)
+//            {
 
-                throw;
-            }
-            return person;
-        }
+//                throw;
+//            }
+//            return person;
+//        }
 
-        public void Delete(long id)
-        {
-            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
+//        public void Delete(long id)
+//        {
+//            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
 
-            if (result != null)
-            {
-                try
-                {
-                    _context.Persons.Remove(result);
-                    _context.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
-        }
+//            if (result != null)
+//            {
+//                try
+//                {
+//                    _context.Persons.Remove(result);
+//                    _context.SaveChanges();
+//                }
+//                catch (Exception)
+//                {
+//                    throw;
+//                }
+//            }
+//        }
 
-        public List<Person> FindAll()
-        {
-            return _context.Persons.ToList();
-        }
+//        public List<Person> FindAll()
+//        {
+//            return _context.Persons.ToList();
+//        }
 
-        public Person FindById(long id)
-        {
-            return _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
-        }
+//        public Person FindById(long id)
+//        {
+//            return _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
+//        }
 
-        public Person Update(Person person)
-        {
-            if (!Exists(person.Id)) return null;
+//        public Person Update(Person person)
+//        {
+//            if (!Exists(person.Id)) return null;
 
-            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
+//            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
 
-            if (result != null)
-            {
-                try
-                {
-                    _context.Entry(result).CurrentValues.SetValues(person);
-                    _context.SaveChanges();
-                }
-                catch (Exception)
-                {
-                    throw;
-                }
-            }
+//            if (result != null)
+//            {
+//                try
+//                {
+//                    _context.Entry(result).CurrentValues.SetValues(person);
+//                    _context.SaveChanges();
+//                }
+//                catch (Exception)
+//                {
+//                    throw;
+//                }
+//            }
 
-            return person;
-        }
+//            return person;
+//        }
 
-        public bool Exists(long id)
-        {
-            return _context.Persons.Any(p => p.Id.Equals(id));
-        }
-    }
-}
+//        public bool Exists(long id)
+//        {
+//            return _context.Persons.Any(p => p.Id.Equals(id));
+//        }
+//    }
+//}
