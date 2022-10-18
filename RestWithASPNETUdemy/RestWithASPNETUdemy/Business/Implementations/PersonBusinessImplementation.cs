@@ -1,10 +1,8 @@
-﻿using RestWithASPNETUdemy.Model;
-using RestWithASPNETUdemy.Model.Context;
-using RestWithASPNETUdemy.Repository;
+﻿using RestWithASPNETUdemy.Data.Converter.Implementation;
+using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository.Generic;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace RestWithASPNETUdemy.Business.Implementations
 {
@@ -12,19 +10,26 @@ namespace RestWithASPNETUdemy.Business.Implementations
     {
         //private readonly IBookRepository _repository;
         private readonly IRepository<Person> _repository;
+        private readonly PersonConverter _converter;
 
         public PersonBusinessImplementation(IRepository<Person> repository)
         {
             _repository = repository;
+            _converter = new PersonConverter();
         }
 
-        public Person Create(Person person)
+        public PersonVO Create(PersonVO person)
         {
-            //EXEMPLO
+            //Para persistir um objeto no banco, temos que realizar os seguintes passos.
 
-            //camada business, dedicada a regras de negócios, sendo tudo trabalhado aqui.
-            //após finalizar a regra, segue com a manipulação do dado na base.
-            return _repository.Create(person);
+            //converter o objetoVO para um objeto que pode ser inserido na base, um VO não pode ser inserido diretamente.
+            var personEntity = _converter.Parse(person);
+
+            //em seguida, é enviado esse objeto que foi convertido com o comando para inserir na base de dados.
+            personEntity = _repository.Create(personEntity);
+
+            //e para retornar as informações ao nosso client. convertemos o retorno de entidade para um objetoVO.
+            return _converter.Parse(personEntity);
         }
 
         public void Delete(long id)
@@ -32,19 +37,26 @@ namespace RestWithASPNETUdemy.Business.Implementations
             _repository.Delete(id);
         }
 
-        public List<Person> FindAll()
+        public List<PersonVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public Person FindById(long id)
+        public PersonVO FindById(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindById(id));
         }
 
-        public Person Update(Person person)
+        public PersonVO Update(PersonVO person)
         {
-            return _repository.Update(person);
+            //converter o objetoVO para um objeto que pode ser inserido na base, um VO não pode ser inserido diretamente.
+            var personEntity = _converter.Parse(person);
+
+            //em seguida, é enviado esse objeto que foi convertido com o comando para inserir na base de dados.
+            personEntity = _repository.Update(personEntity);
+
+            //e para retornar as informações ao nosso client. convertemos o retorno de entidade para um objetoVO.
+            return _converter.Parse(personEntity);
         }
     }
 }

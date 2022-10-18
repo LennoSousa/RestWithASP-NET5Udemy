@@ -1,6 +1,9 @@
-﻿using RestWithASPNETUdemy.Model;
+﻿using RestWithASPNETUdemy.Data.Converter.Implementation;
+using RestWithASPNETUdemy.Data.VO;
+using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Repository.Generic;
+using System;
 using System.Collections.Generic;
 
 namespace RestWithASPNETUdemy.Business.Implementations
@@ -9,15 +12,26 @@ namespace RestWithASPNETUdemy.Business.Implementations
     {
         //private readonly IBookRepository _repository;
         private readonly IRepository<Books> _repository;
+        private readonly BookConverter _converter;
 
         public BookBusinessImplementation(IRepository<Books> repository)
         {
             _repository = repository;
+            _converter = new BookConverter();
         }
 
-        public Books Create(Books book)
+        public BookVO Create(BookVO book)
         {
-            return _repository.Create(book);
+            //Para persistir um objeto no banco, temos que realizar os seguintes passos.
+
+            //converter o objetoVO para um objeto que pode ser inserido na base, um VO não pode ser inserido diretamente.
+            var bookEntity = _converter.Parse(book);
+
+            //em seguida, é enviado esse objeto que foi convertido com o comando para inserir na base de dados.
+            bookEntity = _repository.Create(bookEntity);
+
+            //e para retornar as informações ao nosso client. convertemos o retorno de entidade para um objetoVO.
+            return _converter.Parse(bookEntity);
         }
 
         public void Delete(long id)
@@ -25,19 +39,26 @@ namespace RestWithASPNETUdemy.Business.Implementations
             _repository.Delete(id);
         }
 
-        public List<Books> FindAll()
+        public List<BookVO> FindAll()
         {
-            return _repository.FindAll();
+            return _converter.Parse(_repository.FindAll());
         }
 
-        public Books FindById(long id)
+        public BookVO FindById(long id)
         {
-            return _repository.FindById(id);
+            return _converter.Parse(_repository.FindById(id));
         }
 
-        public Books Update(Books book)
+        public BookVO Update(BookVO book)
         {
-            return _repository.Update(book);
+            //converter o objetoVO para um objeto que pode ser inserido na base, um VO não pode ser inserido diretamente.
+            var bookEntity = _converter.Parse(book);
+
+            //em seguida, é enviado esse objeto que foi convertido com o comando para inserir na base de dados.
+            bookEntity = _repository.Update(bookEntity);
+
+            //e para retornar as informações ao nosso client. convertemos o retorno de entidade para um objetoVO.
+            return _converter.Parse(bookEntity);
         }
     }
 }
