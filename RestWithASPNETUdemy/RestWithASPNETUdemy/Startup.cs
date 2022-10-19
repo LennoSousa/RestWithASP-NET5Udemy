@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using Pomelo.EntityFrameworkCore.MySql.Update.Internal;
 using RestWithASPNETUdemy.Repository.Generic;
+using Microsoft.Net.Http.Headers;
 
 namespace RestWithASPNETUdemy
 {
@@ -55,6 +56,14 @@ namespace RestWithASPNETUdemy
                 MigrationDatabase(connection);
             }
 
+            //permitindo que a API suporte tanto JSON como XML para entrada e saída das informações.
+            services.AddMvc(options =>
+            {
+                options.RespectBrowserAcceptHeader = true;
+                options.FormatterMappings.SetMediaTypeMappingForFormat("xml", MediaTypeHeaderValue.Parse("application/xml"));
+                options.FormatterMappings.SetMediaTypeMappingForFormat("json", MediaTypeHeaderValue.Parse("application/json"));
+            })
+                .AddXmlSerializerFormatters();
 
             //Versionamento da API
             services.AddApiVersioning();
