@@ -16,6 +16,8 @@ using RestWithASPNETUdemy.Repository.Generic;
 using Microsoft.Net.Http.Headers;
 using RestWithASPNETUdemy.Hypermedia.Filters;
 using RestWithASPNETUdemy.Hypermedia.Enricher;
+using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Rewrite;
 
 namespace RestWithASPNETUdemy
 {
@@ -78,6 +80,22 @@ namespace RestWithASPNETUdemy
             //Versionamento da API
             services.AddApiVersioning();
 
+            //Adicionando suporte ao Swagger
+            services.AddSwaggerGen(c => {
+                c.SwaggerDoc("v1",
+                    new OpenApiInfo
+                    {
+                        Title = "REST API's from 0 to Azure with ASP.NET Core 5 and Docker",
+                        Version = "v1",
+                        Description = "API RESTful developed in course 'REST API's from 0 to Azure with ASP.NET Core 5 and Docker'",
+                        Contact = new OpenApiContact
+                        {
+                            Name = "Lenno Sousa",
+                            Url = new Uri("https://google.com")
+                        }
+                    });
+            });
+
 
             //Adicionando injeção de dependência da nossa interface criada.
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
@@ -103,6 +121,22 @@ namespace RestWithASPNETUdemy
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            //responsável por gerar o json, com a documentação.
+            app.UseSwagger();
+
+            //responsável por gerar uma página html para acessar e visualizar a documentação.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(
+                    "/swagger/v1/swagger.json",
+                    "REST API's from 0 to Azure with ASP.NET Core 5 and Docker - v1");
+            });
+
+            //configurando a nossa swagger page
+            var option = new RewriteOptions();
+            option.AddRedirect("^$", "swagger");
+            app.UseRewriter(option);
 
             app.UseAuthorization();
 
