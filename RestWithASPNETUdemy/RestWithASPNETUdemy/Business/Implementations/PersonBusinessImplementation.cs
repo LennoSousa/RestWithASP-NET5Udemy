@@ -1,6 +1,7 @@
 ﻿using RestWithASPNETUdemy.Data.Converter.Implementation;
 using RestWithASPNETUdemy.Data.VO;
 using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Repository.Generic;
 using System.Collections.Generic;
 
@@ -9,10 +10,16 @@ namespace RestWithASPNETUdemy.Business.Implementations
     public class PersonBusinessImplementation : IPersonBusiness
     {
         //private readonly IBookRepository _repository;
-        private readonly IRepository<Person> _repository;
+
+        //sendo comentado, pois a nova demanda de incluir o verbo patch, para ativar ou desativar uma pessoa, requer um acesso a base mais unico.
+        //private readonly IRepository<Person> _repository;
+
+        private readonly IPersonRepository _repository;
+        
+        
         private readonly PersonConverter _converter;
 
-        public PersonBusinessImplementation(IRepository<Person> repository)
+        public PersonBusinessImplementation(IPersonRepository repository)
         {
             _repository = repository;
             _converter = new PersonConverter();
@@ -35,6 +42,13 @@ namespace RestWithASPNETUdemy.Business.Implementations
         public void Delete(long id)
         {
             _repository.Delete(id);
+        }
+
+        public PersonVO Disable(long id)
+        {
+            var personEntity = _repository.Disable(id);
+
+            return _converter.Parse(personEntity);
         }
 
         public List<PersonVO> FindAll()
