@@ -1,88 +1,120 @@
-﻿//using RestWithASPNETUdemy.Model;
-//using RestWithASPNETUdemy.Model.Context;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
+﻿using RestWithASPNETUdemy.Repository.Generic;
+using RestWithASPNETUdemy.Model;
+using RestWithASPNETUdemy.Repository;
+using RestWithASPNETUdemy.Model.Context;
+using System.Linq;
+using System;
 
-//namespace RestWithASPNETUdemy.Repository
-//{
-//    public class PersonRepositoryImplementation : IPersonRepository
-//    {
-//        private MySQLContext _context;
+namespace restwithaspnetudemy.repository
+{
+    public class PersonRepositoryImplementation : GenericRepository<Person>, IPersonRepository
+    {
+        public PersonRepositoryImplementation(MySQLContext context) : base(context) { }
 
-//        public PersonRepositoryImplementation(MySQLContext context)
-//        {
-//            _context = context;
-//        }
+        public Person Disable(long id)
+        {
+            if (!_context.Persons.Any(p => p.Id.Equals(id))) return null;
+            
+            var user = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
 
-//        public Person Create(Person person)
-//        {
-//            try
-//            {
-//                _context.Add(person);
-//                _context.SaveChanges();
-//            }
-//            catch (Exception)
-//            {
+            if (user != null)
+            {
+                user.Enabled = false;
+                try
+                {
+                    _context.Entry(user).CurrentValues.SetValues(user);
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
 
-//                throw;
-//            }
-//            return person;
-//        }
+            return user;
+        }
 
-//        public void Delete(long id)
-//        {
-//            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
 
-//            if (result != null)
-//            {
-//                try
-//                {
-//                    _context.Persons.Remove(result);
-//                    _context.SaveChanges();
-//                }
-//                catch (Exception)
-//                {
-//                    throw;
-//                }
-//            }
-//        }
+        #region old font
+        //        private MySQLContext _context;
 
-//        public List<Person> FindAll()
-//        {
-//            return _context.Persons.ToList();
-//        }
+        //        public PersonRepositoryImplementation(MySQLContext context)
+        //        {
+        //            _context = context;
+        //        }
 
-//        public Person FindById(long id)
-//        {
-//            return _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
-//        }
+        //        public Person Create(Person person)
+        //        {
+        //            try
+        //            {
+        //                _context.Add(person);
+        //                _context.SaveChanges();
+        //            }
+        //            catch (Exception)
+        //            {
 
-//        public Person Update(Person person)
-//        {
-//            if (!Exists(person.Id)) return null;
+        //                throw;
+        //            }
+        //            return person;
+        //        }
 
-//            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
+        //        public void Delete(long id)
+        //        {
+        //            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
 
-//            if (result != null)
-//            {
-//                try
-//                {
-//                    _context.Entry(result).CurrentValues.SetValues(person);
-//                    _context.SaveChanges();
-//                }
-//                catch (Exception)
-//                {
-//                    throw;
-//                }
-//            }
+        //            if (result != null)
+        //            {
+        //                try
+        //                {
+        //                    _context.Persons.Remove(result);
+        //                    _context.SaveChanges();
+        //                }
+        //                catch (Exception)
+        //                {
+        //                    throw;
+        //                }
+        //            }
+        //        }
 
-//            return person;
-//        }
+        //        public List<Person> FindAll()
+        //        {
+        //            return _context.Persons.ToList();
+        //        }
 
-//        public bool Exists(long id)
-//        {
-//            return _context.Persons.Any(p => p.Id.Equals(id));
-//        }
-//    }
-//}
+        //        public Person FindById(long id)
+        //        {
+        //            return _context.Persons.SingleOrDefault(p => p.Id.Equals(id));
+        //        }
+
+        //        public Person Update(Person person)
+        //        {
+        //            if (!Exists(person.Id)) return null;
+
+        //            var result = _context.Persons.SingleOrDefault(p => p.Id.Equals(person.Id));
+
+        //            if (result != null)
+        //            {
+        //                try
+        //                {
+        //                    _context.Entry(result).CurrentValues.SetValues(person);
+        //                    _context.SaveChanges();
+        //                }
+        //                catch (Exception)
+        //                {
+        //                    throw;
+        //                }
+        //            }
+
+        //            return person;
+        //        }
+
+        //        public bool Exists(long id)
+        //        {
+        //            return _context.Persons.Any(p => p.Id.Equals(id));
+        //        }
+
+        #endregion
+
+
+    }
+}

@@ -27,6 +27,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using RestWithASPNETUdemy.Services.Implementations;
 using RestWithASPNETUdemy.Repository.Implementations;
+using restwithaspnetudemy.repository;
 
 namespace RestWithASPNETUdemy
 {
@@ -161,6 +162,8 @@ namespace RestWithASPNETUdemy
             services.AddTransient<ITokenService, TokenService>();
 
             services.AddScoped<IUserRepository, UserRepository>();
+
+            services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
 
