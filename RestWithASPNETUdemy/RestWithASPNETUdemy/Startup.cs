@@ -28,6 +28,8 @@ using Microsoft.AspNetCore.Authorization;
 using RestWithASPNETUdemy.Services.Implementations;
 using RestWithASPNETUdemy.Repository.Implementations;
 using restwithaspnetudemy.repository;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.AspNetCore.Http;
 
 namespace RestWithASPNETUdemy
 {
@@ -147,6 +149,10 @@ namespace RestWithASPNETUdemy
                     });
             });
 
+            #region Dependency Injection
+
+            //dependencia para capturar o path da requisição.
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //Adicionando injeção de dependência da nossa interface criada.
             services.AddScoped<IPersonBusiness, PersonBusinessImplementation>();
@@ -156,7 +162,10 @@ namespace RestWithASPNETUdemy
             //services.AddScoped<IBookRepository, BookRepositoryImplementation>();
 
             services.AddScoped<ILoginBusiness, LoginBusinessImplementation>();
-            
+
+
+            services.AddScoped<IFileBusiness, FileBusinessImplementation>();
+
 
 
             services.AddTransient<ITokenService, TokenService>();
@@ -166,6 +175,8 @@ namespace RestWithASPNETUdemy
             services.AddScoped<IPersonRepository, PersonRepositoryImplementation>();
 
             services.AddScoped(typeof(IRepository<>), typeof(GenericRepository<>));
+
+            #endregion
 
         }
 
