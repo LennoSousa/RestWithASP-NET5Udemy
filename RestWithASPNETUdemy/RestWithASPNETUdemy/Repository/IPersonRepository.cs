@@ -1,5 +1,6 @@
 ﻿using RestWithASPNETUdemy.Model;
 using RestWithASPNETUdemy.Repository.Generic;
+using System.Collections.Generic;
 
 namespace RestWithASPNETUdemy.Repository
 {
@@ -13,6 +14,8 @@ namespace RestWithASPNETUdemy.Repository
         //bool Exists(long id);
 
         Person Disable(long id);
+
+        List<Person> findByName(string firstName, string lastName);
 
     }
 }

@@ -4,6 +4,7 @@ using RestWithASPNETUdemy.Repository;
 using RestWithASPNETUdemy.Model.Context;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace restwithaspnetudemy.repository
 {
@@ -32,6 +33,28 @@ namespace restwithaspnetudemy.repository
             }
 
             return user;
+        }
+
+        public List<Person> findByName(string firstName, string lastName)
+        {
+            if (!string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+            {
+                return _context.Persons.Where(p =>
+                    p.FirstName.Contains(firstName) &&
+                    p.LastName.Contains(lastName)).ToList();
+            }
+            else if (string.IsNullOrWhiteSpace(firstName) && !string.IsNullOrWhiteSpace(lastName))
+            {
+                return _context.Persons.Where(p =>
+                    p.LastName.Contains(lastName)).ToList();
+            }
+            else if (!string.IsNullOrWhiteSpace(firstName) && string.IsNullOrWhiteSpace(lastName))
+            {
+                return _context.Persons.Where(p =>
+                    p.FirstName.Contains(firstName)).ToList();
+            }
+
+            return null;
         }
 
 
