@@ -107,11 +107,11 @@ namespace RestWithASPNETUdemy
             services.AddDbContext<MySQLContext>(options => options.UseMySql(connection, ServerVersion.AutoDetect(connection)));
 
 
-            MigrationDatabase(connection);
-            if (Environment.IsDevelopment())
-            {
-                MigrationDatabase(connection);
-            }
+            //MigrationDatabase(connection);
+            //if (Environment.IsDevelopment())
+            //{
+            //    MigrationDatabase(connection);
+            //}
 
             //permitindo que a API suporte tanto JSON como XML para entrada e saída das informações.
             services.AddMvc(options =>
