@@ -110,6 +110,7 @@ namespace RestWithASPNETUdemy
             //MigrationDatabase(connection);
             //if (Environment.IsDevelopment())
             //{
+            //descomentado nessa aula do azure, para rodar as migrations na nova base de dados na nuvam.
             //    MigrationDatabase(connection);
             //}
 
@@ -138,7 +139,7 @@ namespace RestWithASPNETUdemy
                 c.SwaggerDoc("v1",
                     new OpenApiInfo
                     {
-                        Title = "REST API's from 0 to Azure with ASP.NET Core 5 and Docker",
+                        Title = "REST API's from 0 to Azure with ASP.NET Core 5 and Docker - Foo Bar",
                         Version = "v1",
                         Description = "API RESTful developed in course 'REST API's from 0 to Azure with ASP.NET Core 5 and Docker'",
                         Contact = new OpenApiContact
